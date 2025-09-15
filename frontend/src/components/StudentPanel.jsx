@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { dateToNumber, formatDateNumber } from '../utils';
 
 export default function StudentPanel({ contract, account }) {
+  // State variables
   const [todayPresent, setTodayPresent] = useState(null);
   const [history, setHistory] = useState([]);
   const [isRegistered, setIsRegistered] = useState(null);
@@ -9,10 +10,12 @@ export default function StudentPanel({ contract, account }) {
   const [dateAttendance, setDateAttendance] = useState(null);
   const [msg, setMsg] = useState('');
 
+  // Check registration status on account change
   useEffect(() => {
     checkRegistration();
   }, [account]);
 
+  // Check if the current account is registered as a student
   const checkRegistration = async () => {
     try {
       const registered = await contract.isStudent(account);
@@ -27,6 +30,7 @@ export default function StudentPanel({ contract, account }) {
     }
   };
 
+  // Check today's attendance for the student
   const checkToday = async () => {
     try {
       const today = new Date().toISOString().slice(0,10);
@@ -39,6 +43,7 @@ export default function StudentPanel({ contract, account }) {
     }
   };
 
+  // Check attendance for a specific date
   const checkSpecificDate = async () => {
     try {
       const dateNum = dateToNumber(checkDate);
@@ -51,6 +56,7 @@ export default function StudentPanel({ contract, account }) {
     }
   };
 
+  // Load all attendance dates for the student
   const loadHistory = async () => {
     try {
       const dates = await contract.getAttendanceDates(account);
@@ -63,6 +69,7 @@ export default function StudentPanel({ contract, account }) {
     }
   };
 
+  // Load detailed attendance (date and present/absent) for the student
   const getDetailedAttendance = async () => {
     try {
       const dates = await contract.getAttendanceDates(account);

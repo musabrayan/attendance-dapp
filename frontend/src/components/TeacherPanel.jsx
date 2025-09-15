@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { dateToNumber, formatDateNumber } from '../utils';
 
 export default function TeacherPanel({ contract, students, refreshStudents }) {
+  // State variables for form inputs and UI feedback
   const [newStudent, setNewStudent] = useState('');
   const [bulkStudents, setBulkStudents] = useState('');
   const [selectedStudent, setSelectedStudent] = useState('');
@@ -12,6 +13,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
   const [studentDates, setStudentDates] = useState([]);
   const [status, setStatus] = useState('');
 
+  // Register a single student
   const register = async () => {
     try {
       setStatus('Sending transaction...');
@@ -25,6 +27,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
     }
   };
 
+  // Register multiple students from textarea input
   const registerBulk = async () => {
     try {
       const addresses = bulkStudents.split('\n').map(addr => addr.trim()).filter(addr => addr);
@@ -41,6 +44,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
     }
   };
 
+  // Mark selected student as present for a date
   const markPresent = async () => {
     if (!selectedStudent) return setStatus('Select a student');
     try {
@@ -54,6 +58,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
     }
   };
 
+  // Mark selected student as absent for a date
   const markAbsent = async () => {
     if (!selectedStudent) return setStatus('Select a student');
     try {
@@ -67,6 +72,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
     }
   };
 
+  // Check if a student was present/absent on a specific date
   const checkStudentAttendance = async () => {
     if (!checkStudent) return setStatus('Select a student to check');
     try {
@@ -80,6 +86,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
     }
   };
 
+  // Get all attendance dates for a student
   const getStudentDates = async () => {
     if (!checkStudent) return setStatus('Select a student');
     try {
@@ -92,6 +99,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
     }
   };
 
+  // Check if a student is registered
   const checkStudentStatus = async () => {
     if (!checkStudent) return setStatus('Enter student address');
     try {
@@ -106,6 +114,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
     <div style={{ padding: '20px' }}>
       <h2>Teacher Panel</h2>
 
+      {/* Register Single Student */}
       <section style={{ marginBottom: '30px', border: '1px solid #ccc', padding: '15px' }}>
         <h3>Register Single Student</h3>
         <input 
@@ -117,6 +126,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
         <button onClick={register}>Register Student</button>
       </section>
 
+      {/* Register Multiple Students */}
       <section style={{ marginBottom: '30px', border: '1px solid #ccc', padding: '15px' }}>
         <h3>Register Multiple Students</h3>
         <textarea 
@@ -130,6 +140,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
         <button onClick={registerBulk} style={{ marginTop: '10px' }}>Register All Students</button>
       </section>
 
+      {/* Mark Attendance */}
       <section style={{ marginBottom: '30px', border: '1px solid #ccc', padding: '15px' }}>
         <h3>Mark Attendance</h3>
         <div style={{ marginBottom: '10px' }}>
@@ -166,6 +177,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
         </button>
       </section>
 
+      {/* Check Student Attendance */}
       <section style={{ marginBottom: '30px', border: '1px solid #ccc', padding: '15px' }}>
         <h3>Check Student Attendance</h3>
         <div style={{ marginBottom: '10px' }}>
@@ -206,6 +218,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
         )}
       </section>
 
+      {/* Student Attendance History */}
       <section style={{ marginBottom: '30px', border: '1px solid #ccc', padding: '15px' }}>
         <h3>Student Attendance History</h3>
         <div style={{ marginBottom: '10px' }}>
@@ -236,6 +249,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
         )}
       </section>
 
+      {/* List all registered students */}
       <section style={{ marginBottom: '30px', border: '1px solid #ccc', padding: '15px' }}>
         <h3>All Registered Students ({students.length})</h3>
         <button onClick={refreshStudents} style={{ marginBottom: '10px' }}>Refresh Student List</button>
@@ -250,6 +264,7 @@ export default function TeacherPanel({ contract, students, refreshStudents }) {
         </div>
       </section>
 
+      {/* Status message */}
       {status && (
         <div style={{ 
           padding: '10px', 

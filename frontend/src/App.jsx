@@ -4,29 +4,38 @@ import abi from './abi/AttendanceSystem.json';
 import TeacherPanel from './components/TeacherPanel';
 import StudentPanel from './components/StudentPanel';
 
+// Get contract address from environment variable
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS || '';
 
 export default function App() {
-  const [account, setAccount] = useState(null);
-  const [contract, setContract] = useState(null);
-  const [isTeacher, setIsTeacher] = useState(false);
-  const [students, setStudents] = useState([]);
+  // React state variables
+  const [account, setAccount] = useState(null);      // currently connected wallet address
+  const [contract, setContract] = useState(null);    // contract instance
+  const [isTeacher, setIsTeacher] = useState(false); // check if connected account is teacher
+  const [students, setStudents] = useState([]);      // list of registered students
 
+  // Detect account changes (MetaMask) and update state
   useEffect(() => {
     if (!window.ethereum) return;
-    // auto-detect account changes
-    window.ethereum.on && window.ethereum.on('accountsChanged', (accounts) => {
-      setAccount(accounts[0] || null);
-    });
+    window.ethereum.on &&
+      window.ethereum.on('accountsChanged', (accounts) => {
+        setAccount(accounts[0] || null);
+      });
   }, []);
 
+  // Load contract whenever account changes
   useEffect(() => {
     if (!window.ethereum || !account || !CONTRACT_ADDRESS) return;
+
+    // Create a provider and signer
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
+
+    // Connect to deployed smart contract
     const c = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
     setContract(c);
 
+    // Fetch teacher address and student list from contract
     (async () => {
       try {
         const teacherAddress = await c.teacher();
@@ -39,6 +48,7 @@ export default function App() {
     })();
   }, [account]);
 
+  // Function to connect MetaMask wallet
   const connectWallet = async () => {
     if (!window.ethereum) return alert('Please install MetaMask');
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -51,6 +61,7 @@ export default function App() {
         <h1>Attendance DApp</h1>
       </header>
 
+      {/* If no account connected, show connect button */}
       {!account ? (
         <div className="center">
           <button onClick={connectWallet}>Connect MetaMask</button>
@@ -58,16 +69,28 @@ export default function App() {
         </div>
       ) : (
         <div className="content">
-          <p>Connected: <code>{account}</code></p>
+          {/* Show connected account address */}
+          <p>
+            Connected: <code>{account}</code>
+          </p>
 
+          {/* Check if contract address is set and contract is loaded */}
           {!CONTRACT_ADDRESS ? (
-            <p style={{color:'red'}}>Set VITE_CONTRACT_ADDRESS in .env.local</p>
+            <p style={{ color: 'red' }}>Set VITE_CONTRACT_ADDRESS in .env.local</p>
           ) : !contract ? (
             <p>Loading contract...</p>
           ) : (
             <>
+              {/* If teacher, show TeacherPanel else show StudentPanel */}
               {isTeacher ? (
-                <TeacherPanel contract={contract} students={students} refreshStudents={async ()=> { const s = await contract.getStudentList(); setStudents(s); }} />
+                <TeacherPanel
+                  contract={contract}
+                  students={students}
+                  refreshStudents={async () => {
+                    const s = await contract.getStudentList();
+                    setStudents(s);
+                  }}
+                />
               ) : (
                 <StudentPanel contract={contract} account={account} />
               )}
@@ -76,5 +99,5 @@ export default function App() {
         </div>
       )}
     </div>
-  )
+  );
 }
