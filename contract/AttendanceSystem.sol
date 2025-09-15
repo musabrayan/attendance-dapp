@@ -66,3 +66,4 @@ contract AttendanceSystem {
         return attendance[_date][_student];
     }
 }
+
