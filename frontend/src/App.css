@@ -1,42 +1,313 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* --- 1. CSS Variables (Theme Configuration) --- */
+:root {
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Fira Code', 'Consolas', monospace;
+
+  /* Color Palette */
+  --color-bg-dark: #0d1117;
+  --color-bg-light: #161b22;
+  --color-surface: rgba(22, 27, 34, 0.8); /* For cards/sections */
+  --color-border: rgba(139, 148, 158, 0.3);
+  --color-text-primary: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-accent-primary: #58a6ff;
+  --color-accent-secondary: #a371f7;
+  --color-accent-glow: rgba(88, 166, 255, 0.3);
+
+  --color-success: #3fb950;
+  --color-error: #f85149;
+  --color-success-bg: rgba(63, 185, 80, 0.1);
+  --color-error-bg: rgba(248, 81, 73, 0.1);
+
+  /* Gradients */
+  --gradient-bg: linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-light) 100%);
+  --gradient-accent: linear-gradient(90deg, var(--color-accent-primary) 0%, var(--color-accent-secondary) 100%);
+  
+  /* Shadows */
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* --- 2. Reset and Base Styles --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-primary);
+  background: var(--gradient-bg);
+  min-height: 100vh;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- 3. Layout --- */
+.app {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.app header {
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.content {
+  max-width: 900px;
+  margin: auto;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* --- 4. Typography --- */
+.app header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+section h3 {
+  color: var(--color-text-primary);
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+section h3::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: var(--gradient-accent);
+  border-radius: 2px;
+  margin-right: 12px;
+}
+
+code {
+  background: var(--color-bg-dark);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  word-break: break-all;
+}
+
+label {
+  display: block;
+  margin: 12px 0 8px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+/* --- 5. Components --- */
+/* Sections / Cards */
+section {
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+  padding: 28px;
+  margin: 24px 0;
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Form Elements */
+input, select {
+  margin: 8px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: var(--font-primary);
+  background: var(--color-bg-light);
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 0 4px var(--color-accent-glow);
+}
+
+select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238b949e' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 16px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 48px;
+  appearance: none;
+}
+
+/* Buttons */
+button {
+  margin: 8px 0;
+  padding: 14px 28px;
+  background: var(--gradient-accent);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Button Shine Effect */
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 100%);
+  transform: skewX(-25deg);
+  transition: left 0.7s ease;
+  z-index: -1;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(88, 166, 255, 0.3);
+}
+
+button:hover::before {
+  left: 125%;
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: var(--color-bg-light);
+  padding: 14px 18px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border-left: 4px solid var(--color-accent-primary);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+li:hover {
+  background: #21262d; /* Slightly lighter than bg-light */
+  transform: translateX(4px);
+  border-left-color: var(--color-accent-secondary);
+}
+
+/* Horizontal Rule */
+hr {
+  border: none;
+  height: 1px;
+  background: var(--color-border);
+  margin: 32px 0;
+}
+
+/* --- 6. Statuses & Indicators --- */
+p {
+  margin: 12px 0;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+/* Default status style */
+section p:last-child {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.success {
+  background: var(--color-success-bg) !important;
+  border: 1px solid var(--color-success) !important;
+  color: var(--color-success) !important;
+}
+
+.error {
+  background: var(--color-error-bg) !important;
+  border: 1px solid var(--color-error) !important;
+  color: var(--color-error) !important;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+.loading {
+  animation: pulse 2s infinite;
+}
+
+/* --- 7. Responsive Design --- */
+@media (max-width: 768px) {
+  .content {
+    max-width: 100%;
+    padding: 0 16px;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .app header h1 {
+    font-size: 2.2rem;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  
+  section {
+    padding: 20px;
+    margin: 16px 0;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  
+  input, select, button {
+    width: 100%;
+    margin: 8px 0;
+  }
 }
